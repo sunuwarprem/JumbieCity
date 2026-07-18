@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Jumbie Hunt: Find Pooza</title>
+<link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+
+<canvas id="game"></canvas>
+
+<div id="hud">
+  <div class="hud-block">
+    <div class="hud-label">Health</div>
+    <div class="hud-value hud-health" id="healthVal">&hearts;&hearts;&hearts;</div>
+  </div>
+  <div class="hud-block hud-block-center">
+    <div class="hud-label">Wave</div>
+    <div class="hud-value" id="waveVal">1</div>
+  </div>
+  <div class="hud-block">
+    <div class="hud-label">Jumbies</div>
+    <div class="hud-value" id="jumbieVal">10</div>
+  </div>
+  <div class="hud-block hud-block-center">
+    <div class="hud-label">Kills</div>
+    <div class="hud-value" id="killsVal">0/30</div>
+  </div>
+  <button id="pauseBtn" class="mute-btn" type="button" aria-label="Pause">&#10074;&#10074;</button>
+  <button id="muteBtn" class="mute-btn" type="button" aria-label="Toggle sound">&#128266;</button>
+</div>
+
+<div id="bannerMsg"><span id="bannerText">WAVE 2</span></div>
+<div id="poozaMessage"><span>&hearts; You found her &hearts;</span></div>
+<div id="heartRain"></div>
+
+<div id="controls-hint">W/S forward &amp; back &nbsp;&middot;&nbsp; A/D turn &nbsp;&middot;&nbsp; space jump &nbsp;&middot;&nbsp; click shoot</div>
+
+<!-- on-screen mobile controls -->
+<div id="touchControls">
+  <div id="joystickZone">
+    <div id="joystickBase"><div id="joystickKnob"></div></div>
+  </div>
+  <button id="jumpBtn" class="touch-btn touch-btn-round" aria-label="Jump" style="bottom:calc(140px + env(safe-area-inset-bottom)); left:40px; width:64px; height:64px; font-size:22px;">&#8593;</button>
+  <button id="shootBtn" class="touch-btn touch-btn-round" aria-label="Shoot">&#128293;</button>
+</div>
+
+<div id="overlay">
+  <div class="panel">
+    <h1>Jumbie Hunt</h1>
+    <div class="sub" id="panelSub">a smoke-choked city hides Princess Pooza</div>
+    <div class="divider"></div>
+
+    <div id="startPanelBody">
+      <div class="princess-line">The jumbies took the city at dawn. Clear <strong>30 of them</strong> to reveal where <strong>Princess Pooza</strong> is hiding.</div>
+      <label class="name-label" for="nameInput">Your name</label>
+      <input type="text" id="nameInput" maxlength="14" placeholder="Explorer" autocomplete="off">
+      <button id="startBtn">Enter the City</button>
+
+      <div class="leaderboard">
+        <div class="leaderboard-title">Top Survivors (Global)</div>
+        <ol id="startLeaderboardList" class="leaderboard-list"><li class="leaderboard-empty">Connect multiplayer to see this</li></ol>
+      </div>
+    </div>
+
+    <div id="countdownPanelBody" style="display:none;">
+      <div class="countdown-message">the jumbies are close, stay sharp</div>
+      <div class="countdown-number" id="countdownNumber">3</div>
+    </div>
+
+    <div id="pausePanelBody" style="display:none;">
+      <div class="result-heading">Paused</div>
+      <div class="result-sub">The city waits.</div>
+      <div class="btn-row">
+        <button id="resumeBtn">Resume</button>
+        <button id="pauseExitBtn" class="btn-secondary">Exit</button>
+      </div>
+      <button id="pauseRestartBtn" class="btn-secondary" style="width:100%; margin-top:10px;">Restart</button>
+    </div>
+
+    <div id="endPanelBody" style="display:none;">
+      <div class="result-heading" id="endHeading">You Fell</div>
+      <div class="result-sub" id="endSub">The jumbies got too close...</div>
+      <div class="stat-row">
+        <div class="stat"><div class="n" id="finalWave">1</div><div class="l">Wave</div></div>
+        <div class="stat"><div class="n" id="finalKills">0</div><div class="l">Kills</div></div>
+      </div>
+      <div class="btn-row">
+        <button id="retryBtn">Try Again</button>
+        <button id="exitBtn" class="btn-secondary">Exit</button>
+      </div>
+
+      <div class="leaderboard">
+        <div class="leaderboard-title">Top Survivors (Global)</div>
+        <ol id="endLeaderboardList" class="leaderboard-list"></ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="game.js?v=8"></script>
+
+<!-- multiplayer: safe to leave these in even before Firebase is configured —
+     multiplayer.js detects placeholder config and quietly runs single-player -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="firebase-config.js?v=1"></script>
+<script src="multiplayer.js?v=1"></script>
+
+<div id="fatalOverlay" class="fatal-overlay" style="display:none;">
+  <div class="fatal-box">
+    <p id="fatalMessage">Something interrupted the game.</p>
+    <button id="fatalReloadBtn">Reload Game</button>
+  </div>
+</div>
+<script>
+document.getElementById('fatalReloadBtn').addEventListener('click', function(){
+  window.location.reload();
+});
+</script>
+</body>
+</html>
